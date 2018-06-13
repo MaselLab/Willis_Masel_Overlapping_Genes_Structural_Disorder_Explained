@@ -1,9 +1,11 @@
-This directory contains four data tables that were used in our research. They are in comma-delimited format and are as follows:
+This directory contains six data tables that were used in our research. They are in comma-delimited format and are as follows:
 
 	1 - OverlappingVirusGenes_92PairsWithSequenceData.csv
 	2 - OverlappingVirusGenes_PValue_0.035_Length_200.csv
 	3 - VirusGenes_Nonoverlapping_Controls_Complete.csv
 	4 - VirusCodonBias.csv
+	5 - VirusGenes_Nonoverlapping_Controls_AncestralHomologs.csv
+	6 - NonOverlappingViralControls_ORFsByFrame.csv
 
 1 - Contains 184 genes, translating to 92 overlapping gene pairs, from viral genomes. These are the 184 genes pulled from the literature for which we could find sequence data.
 
@@ -15,6 +17,10 @@ This directory contains four data tables that were used in our research. They ar
 	- Randomly-scrambled nucleotide control
 
 4 - Contains the raw codon count, RSCU values and relative adaptedness values for each codon for the viral species used in this work. These values were used to determine the codon bias for genes by comparing the codon usage of the gene with the codon usage of the genome as a whole. 
+
+5 - Contains the pre-overlapping genes that are homologous to the ancestral overlapping genes in our analyses. Also contains the artificially-frameshifted controls and preexisting ORF controls generated from these sequences. 
+
+6 - Contains all the preexisting ORF controls generated from the non-overlapping genes in data table 3. Controls only generated from the protein-coding genes (not the artificially-frameshifted controls in data table 3).
 
 ====================================================
 
@@ -66,3 +72,35 @@ Data table 3 has fewer entries. The ones that are there are similar to those in 
 Data table 4's entries should be self-explanatory. The Designation column tells the reader whether they are looking at the raw codon count, the relative adaptedness values or the RSCU values. The description of relative adaptedness values and RSCU values can be found in our paper, as well as the source we used when calculating them: 
 
 Graur, D., Sater, A. K., & Cooper, T. F. (2016). Molecular and genome evolution. Sunderland, MA: Sinauer Associates, Inc.
+
+====================================================
+
+Data table 4 has the following entries:
+
+[1] - SequenceUID 
+[2] - OldSequenceUID - The UID associated with the ancestral gene in data table 2 that the gene is homologous to
+[3] - OldPairUID - The pair UID associated with the ancestral gene in data table 2
+[4] - Species
+[5] - GeneName
+[6] - NCBIAccessionNumber
+[7] - ControlDesignation - Either CodingGene, ShiftedReadingFrameControlPlus[One/Two], or OrfPlus[One/Two]Control
+[8] - CodingGene - The nucleotide sequence
+[9] - ProteinSequence - The translated CodingGene
+[10] - NoCysProteinSequence - ProteinSequence with all cysteines removed for analysis by IUPred
+[11] - NoCysIUPredMeanISD - The ISD score calculated by averaging all values predicted by IUPred (one per amino acid)
+[12] - NoCysOrigDataIUPredAminoAcidISDScores - The raw output from IUPred
+
+
+====================================================
+
+Data Table 6 has the following entries:
+
+[1] - SequenceUID
+[2] - OldSequenceUID - The UID associated with the gene 
+[3] - CodingGene - The nucleotide sequence of the ORF control
+[4] - GeneDesignation - Always ORFControl. Included for ease of integration with other data sets in linear models
+[5] - Frame - +1 or +2 (frame ORF was found in in original coding sequence)
+[6] - ProteinSequence - Translated coding sequence
+[7] - NoCysProteinSequence - ProteinSequence with all cysteines removed for analysis by IUPred
+[8] - NoCysProteinSequenceLength - This was used as a cutoff for which ORF controls were going to be used. IUPred uses a sliding window of at least 25 AA to predict disorder, so ISD predictions for sequences with fewer than 25 AA (after removal of cysteine) are unreliable.
+[9] - NoCysIUPredMeanISD - The mean ISD of the sequence predicted by IUPred. Calculated by summing over all individual ISD values (one per AA)
